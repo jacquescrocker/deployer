@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "\nUsage: enhancify [path]\n "
+end
+
+begin
+  optparse.parse!
+rescue OptionParser::InvalidOption
+  puts "\nInvalid Option. See the list of available options below.\n"
+  puts optparse
+  puts "\n "
+  exit
+end
+
+if ARGV.empty?
+  puts "Please specify the path to the Capfile."
+  puts "example: enhancify /path/to/rails_root"
+  exit
+end
+
+if Dir.entries(ARGV[0]).include?("Capfile")
+  puts "[Deployer] => Found Capfile!"
+  PATH    = File.expand_path(ARGV[0])
+  CAPFILE = File.expand_path(File.join(ARGV[0], "Capfile"))
+else
+  puts "[Deployer] => Could not find Capfile in #{File.expand_path(ARGV[0])}!"
+  exit
+end
+
+if File.directory?(File.join(PATH, "config"))
+  puts "[Deployer] => Found config folder!"
+else
+  puts "[Deployer] => Could not find the \"config\" folder. Creating it now!"
+  %x(mkdir #{File.join(PATH, 'config')})
+end
+
+if File.exist?(File.join(PATH, "config", "deploy.rb"))
+  old_versions = Dir.entries(File.join(PATH, 'config')).map {|entree| entree if entree =~ /deploy\.old\.(\d+)\.rb$/}.compact!
+  if old_versions.empty?
+    puts "[Deployer] => Found only the original version of deploy.rb. Renaming it to deploy.old.1.rb."
+    %x(mv #{File.join(PATH, 'config', 'deploy.rb')} #{File.join(PATH, 'config', 'deploy.old.1.rb')})
+  else  
+    puts "[Deployer] => Found old versions of deploy.rb file."
+    version = old_versions.last.match('^deploy\.old\.(\d+)\.rb$')[1].to_i + 1
+    puts "[Deployer] => Renaming deploy.rb to deploy.old.#{version}.rb"
+    %x(mv #{File.join(PATH, 'config', 'deploy.rb')} #{File.join(PATH, 'config', "deploy.old.#{version}.rb")})
+  end
+else
+  puts "[Deployer] => Could not find deploy.rb. Creating a new one!"
+end
+
+puts "[Deployer] => Writing new deploy.rb."
+File.open(File.join(File.dirname(__FILE__), '..', 'setup', 'deploy.rb'), "r") do |template|
+  File.open(File.join(PATH, 'config', 'deploy.rb'), 'w') do |file|
+    file.write(template.read)
+  end
+end
+
+unless File.open(File.join('Capfile'), 'r').read.include?('require "deployer/initializer"')
+  puts "[Deployer] => Adding Deployer Loader inside #{PATH}/Capfile."
+  File.open(File.join(PATH, 'Capfile'), "a") do |capfile|
+capfile << <<-CAPFILE
+\n
+require "deployer/initializer"
+load deployer
+CAPFILE
+  end
+end
+
+puts "[Deployer] => Finished Enhancing Capistrano!"
+exit

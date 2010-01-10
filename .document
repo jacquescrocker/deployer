@@ -1,0 +1,4 @@
+README.textile
+lib/**/*.rb
+bin/*
+LICENSE

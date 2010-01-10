@@ -39,13 +39,6 @@ namespace :deploy do
      run "cd #{current_path}; rake db:drop #{env}"
     end
 
-    desc "Moves the SQLite3 Production Database to the shared path"
-    task :move_to_shared do
-     log "Moving the SQLite3 Production Database to the shared path"
-     run "mv #{current_path}/db/production.sqlite3 #{shared_path}/db/production.sqlite3"
-     system "cap deploy:setup_symlinks"
-    end
-
     desc "Populates the Production Database"
     task :seed do
      log "Populating the Production Database"

@@ -19,7 +19,6 @@ set   :deploy_to,           "/var/rails/#{domain}"
 set   :repository_path,     "/var/git/#{domain}.git"
 set   :repository,          "ssh://#{user}@#{application}#{repository_path}"
 
-# The following configuration *optional*
 set   :scm,                 "git"
 set   :branch,              "master"
 set   :use_sudo,            true

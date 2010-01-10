@@ -16,13 +16,13 @@ Gem::Specification.new do |s|
   s.executables = ["enhancify"]
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.textile"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "LICENSE",
-     "README.rdoc",
+     "README.textile",
      "Rakefile",
      "VERSION",
      "bin/enhancify",
@@ -41,19 +41,13 @@ Gem::Specification.new do |s|
      "lib/tasks/passenger.rb",
      "lib/tasks/plugin.rb",
      "lib/tasks/repository.rb",
-     "setup/deploy.rb",
-     "test/helper.rb",
-     "test/test_deployer.rb"
+     "setup/deploy.rb"
   ]
   s.homepage = %q{http://github.com/meskyanichi/deployer}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{one-line summary of your gem}
-  s.test_files = [
-    "test/helper.rb",
-     "test/test_deployer.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

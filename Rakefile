@@ -5,13 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "deployer"
-    gem.summary = %Q{one-line summary of your gem}
-    gem.description = %Q{longer description of your gem}
+    gem.summary = %Q{Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.}
+    gem.description = %Q{Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.}
     gem.email = "meskyanichi@gmail.com"
     gem.homepage = "http://github.com/meskyanichi/deployer"
     gem.authors = ["Michael van Rooijen"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency "capistrano", ">= 2.5.13"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

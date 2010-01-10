@@ -44,7 +44,7 @@ namespace :deploy do
   task :setup_symlinks do
     log "Setting up Symbolic Links"
     run "mkdir -p #{File.join(current_path, 'lib', 'tasks')}"
-    shared_symlinks = %w(config/database.yml db/production.sqlite3 lib/tasks/deployer.rake)
+    shared_symlinks = %w(config/database.yml lib/tasks/deployer.rake)
     shared_symlinks += additional_shared_symlinks if respond_to?(:additional_shared_symlinks)
     shared_symlinks.each do |symlink|
       run "ln -nfs #{File.join(shared_path, symlink)} #{File.join(current_path, symlink)}"
@@ -55,7 +55,7 @@ namespace :deploy do
   desc "Sets up the shared path"
   task :setup_shared_path do
     log "Setting up the shared path"
-    shared_folders = %w(db config lib/tasks)
+    shared_folders = %w(config lib/tasks)
     shared_folders += additional_shared_folders if respond_to?(:additional_shared_folders)
     shared_folders.each do |folder|
       run "mkdir -p #{shared_path}/#{folder}"

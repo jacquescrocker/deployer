@@ -5,7 +5,8 @@ require File.join(File.dirname(__FILE__), 'deployer', 'helpers')
 set   :application,         ip
 set   :deploy_to,           "/var/rails/#{domain}"
 set   :repository_path,     "/var/git/#{domain}.git"
-set   :repository,          "ssh://#{user}@#{application}#{repository_path}"
+set   :repository,          "#{user}@#{application}:#{repository_path}"
+set   :repository,          repository_url if respond_to?(:repository_url)
 
 set   :scm,                 "git"
 set   :use_sudo,            true

@@ -82,9 +82,9 @@ end
 # The settings below are default, you do not need to set these, unless you want to specify other parameters.
 # If you find that the settings below are fine, then you can leave them commented out or just remove them.
 # 
-# set :remote                         = 'origin'                          # Specify the remote that should be deployed
-# set :branch                         = 'master'                          # Specify the branch that should be deployed
-# set :apache_initialize_utility_path = '/etc/init.d/apache2'             # Only applies if running Apache and using the Apache Tasks
-# set :apache_sites_available_path    = '/etc/apache2/sites-available'    # Only applies if running Apache and using the Apache Tasks
-# set :nginx_initialize_utility_path  = '/etc/init.d/nginx'               # Only applies if running NginX and using the NginX Tasks
-# set :nginx_sites_enabled_path       = '/opt/nginx/conf/sites-enabled'   # Only applies if running NginX and using the NginX Tasks
+# set :remote,                          'origin'                          # Specify the remote that should be deployed
+# set :branch,                          'master'                          # Specify the branch that should be deployed
+# set :apache_initialize_utility_path,  '/etc/init.d/apache2'             # Only applies if running Apache and using the Apache Tasks
+# set :apache_sites_available_path,     '/etc/apache2/sites-available'    # Only applies if running Apache and using the Apache Tasks
+# set :nginx_initialize_utility_path,   '/etc/init.d/nginx'               # Only applies if running NginX and using the NginX Tasks
+# set :nginx_sites_enabled_path,        '/opt/nginx/conf/sites-enabled'   # Only applies if running NginX and using the NginX Tasks

@@ -14,23 +14,23 @@ namespace :deploy do
       CONFIG
       
       create_tmp_file(config)
-      run "mkdir -p /opt/nginx/conf/sites-enabled"
-      system "rsync -vr tmp/#{domain} #{user}@#{application}:/opt/nginx/conf/sites-enabled/#{domain}"
+      run "mkdir -p #{nginx_sites_enabled_path}"
+      system "rsync -vr tmp/#{domain} #{user}@#{application}:#{File.join(nginx_sites_enabled_path, domain)}"
       File.delete("tmp/#{domain}")
       system 'cap deploy:nginx:restart'
     end
     
     desc "Restarts NginX."
     task :restart do
-      Net::SSH.start(application, user) {|ssh| ssh.exec "/etc/init.d/nginx stop"}
-      Net::SSH.start(application, user) {|ssh| ssh.exec "/etc/init.d/nginx start"}
+      Net::SSH.start(application, user) {|ssh| ssh.exec "#{nginx_initialize_utility_path} stop"}
+      Net::SSH.start(application, user) {|ssh| ssh.exec "#{nginx_initialize_utility_path} start"}
     end
     
     desc "Removes NginX configuration and disables it."
     task :destroy do
       log "Removing NginX Virtual Host for #{domain}"
       begin
-        run("rm /opt/nginx/conf/sites-enabled/#{domain}")
+        run("rm #{File.join(nginx_sites_enabled_path, domain)}")
       ensure
         system 'cap deploy:nginx:restart'
       end

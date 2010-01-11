@@ -2,7 +2,7 @@ namespace :deploy do
   
   desc "Initializes a bunch of tasks in order after the last deployment process."
   task :restart do
-    system "cap deploy:setup_shared_path" unless defined?(@initial)
+    system "cap deploy:setup_shared_path"
     system "cap deploy:setup_symlinks"
     system "cap deploy:gems:install"
     system "cap deploy:db:create"
@@ -14,7 +14,6 @@ namespace :deploy do
 
   desc "Executes the initial procedures for deploying a Ruby on Rails Application."
   task :initial do
-    @initial = true
     system "cap deploy:setup"
     system "cap deploy:setup_shared_path"
     system "cap deploy:db:sync_yaml"
@@ -52,7 +51,7 @@ namespace :deploy do
   desc "Syncs the rake tasks for installing gems."
   task :sync_tasks do
     log "Adding Deployer Rake tasks to shared path."
-    system "rsync -vr --exclude='.DS_Store' #{File.join(File.dirname(__FILE__), '..', 'lib', 'tasks', 'deployer.rake')} #{user}@#{application}:#{shared_path}/lib/tasks/"
+    system "rsync -vr --exclude='.DS_Store' #{File.join(File.dirname(__FILE__), '..', 'deployer', 'tasks', 'deployer.rake')} #{user}@#{application}:#{File.join(shared_path, 'lib', 'tasks')}"
   end
 
 end

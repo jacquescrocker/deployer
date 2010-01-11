@@ -40,6 +40,8 @@
 # Assumes Application and Git Repository are located on the same server
 set :ip,          "123.45.678.90" # the ip address that points to your production server and git repository
 set :user,        "root"          # the user that has access
+set :remote,      "origin"        # the remote that should be deployed
+set :branch,      "master"        # the branch that should be deployed
 set :domain,      "example.com"   # (or   set :domain,    "subdomain.example.com"
 set :subdomain,   false           # and   set :subdomain, true)
 
@@ -87,12 +89,10 @@ namespace :deploy do
 end
 
 
-# Default Configuration (Git/Repository Apache/NginX)
+# Default Configuration Apache/NginX
 # The settings below are default, you do not need to set these, unless you want to specify other parameters.
 # If you find that the settings below are fine, then you can leave them commented out or just remove them.
 # 
-# set :remote,                          'origin'                          # Specify the remote that should be deployed
-# set :branch,                          'master'                          # Specify the branch that should be deployed
 # set :apache_initialize_utility_path,  '/etc/init.d/apache2'             # Only applies if running Apache and using the Apache Tasks
 # set :apache_sites_available_path,     '/etc/apache2/sites-available'    # Only applies if running Apache and using the Apache Tasks
 # set :nginx_initialize_utility_path,   '/etc/init.d/nginx'               # Only applies if running NginX and using the NginX Tasks

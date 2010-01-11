@@ -12,7 +12,8 @@ namespace :deploy do
     end
 
     desc "Creates the remote Git repository."
-    task :create => :base do
+    task :create do
+      base
       log "Creating remote Git repository"
       run "mkdir -p #{repository_path}"
       run "cd #{repository_path} && git --bare init"
@@ -22,7 +23,8 @@ namespace :deploy do
     end
 
     desc "Creates the remote Git repository."
-    task :destroy => :base do
+    task :destroy do
+      base
       log "destroying remote Git repository"
       run "rm -rf #{repository_path}"
       system "git remote rm #{remote}"
@@ -30,14 +32,16 @@ namespace :deploy do
     end
 
     desc "Resets the remote Git repository."
-    task :reset => :base do
+    task :reset do
+      base
       log "Resetting remove Git repository"
       system "cap deploy:repository:destroy"
       system "cap deploy:repository:create"
     end
     
     desc "Reinitializes #{remote}/master."
-    task :reinitialize => :base do
+    task :reinitialize do
+      base
       system "git remote rm #{remote}"
       system "git remote add #{remote} #{repository[:repository]}"
       p "#{repository[:repository]} (#{remote}/master) was added to your git repository."

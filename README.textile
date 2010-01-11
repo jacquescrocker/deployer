@@ -128,6 +128,24 @@ p. The second symlink will be a link from the shared/db/production.sqlite3 to th
 
 p. One important thing to note here is that notice how the symlinks are mirrored to the Rails applications folder structure. This will always be the case. If you have some crazy architecture inside your Rails application: *rails_root/my/awesome/folder/structure/is/very/long* then you MUST create the following folder structure for the shared path: *shared/my/awesome/folder/structure/is/very/long*. This is a convention and it saves a lot of overhead in your configuration file by just defining a path once and using that same path for both the current and shared path.
 
+p. *Additional (Optional) (Server) Configuration*
+
+p. Here you can specify that you want to pull/push from/to a git repository that's located on a DIFFERENT server. Leave this commented out or remove it if your git repository resides on the same server as your Rails application. If you choose to store your git repository on a separate server by uncommenting the following line, then you lose the ability to create/reset/destroy/reinitialize it through *Deployer*. This is no big deal though. All you have to do is create the git repository manually on that specific server and then issue the *git remote add origin repository_url* and it will work fine with the rest of *Deployer*.
+
+bc. set :repository_url,  "root@example.com:/path/to/repository.git"
+
+p. And then here is the last bit of server configuration you can specify.
+
+bc. set :remote,                          'origin'                          # Specify the remote that should be deployed
+set :branch,                          'master'                          # Specify the branch that should be deployed
+set :apache_initialize_utility_path,  '/etc/init.d/apache2'             # Only applies if running Apache and using the Apache Tasks
+set :apache_sites_available_path,     '/etc/apache2/sites-available'    # Only applies if running Apache and using the Apache Tasks
+set :nginx_initialize_utility_path,   '/etc/init.d/nginx'               # Only applies if running NginX and using the NginX Tasks
+set :nginx_sites_enabled_path,        '/opt/nginx/conf/sites-enabled'   # Only applies if running NginX and using the NginX Tasks
+
+p. Again, very straightforward. I even added comments. One thing to note here is that these are commented out by default and you don't have to "uncomment" them to get the defaults. If you like the default settings you can leave it commented out, or just remove the lines. Or of course, uncomment them and leave them unchanged. Whatever you want.
+
+
 h3. *Adding Application Specific Deployment Tasks*
 
 p. Inside the *namespace :deploy do* block you can define your own deployment tasks that are specific to your application.
@@ -193,15 +211,15 @@ p. Now, just to clear some things up with some facts about the conventions:
 
 bc. /var/rails/:domain
 
-*Git Repository Path*
+*Git Repository Path* unless specified otherwise in the configuration file.
 
 bc. /var/git/:domain.git
 
-*If using the Apache2 create/destroy/restart/destroy_all features, Apache2's sites-available path must be*
+*If using the Apache2 create/destroy/restart/destroy_all features, Apache2's sites-available path must be the following*, unless specified otherwise in the configuration file.
 
 bc. /etc/apache2/sites-available/
 
-*If using the NginX create/destroy/restart/destroy_all features, NginX's sites-enabled path must be*
+*If using the NginX create/destroy/restart/destroy_all features, NginX's sites-enabled path must be the following*, unless specified otherwise in the configuration file.
 
 bc. /opt/nginx/conf/sites-enabled/
 
@@ -210,15 +228,15 @@ If you don't have this functionality, but want it, check out: "http://github.com
 For NginX you must also add this: *include sites-enabled/** inside the nginx configuration file, inside the *server{}* block to include all settings that *Deployer* transfers into the sites-enabled
 
 * Assumes you are using Phusion Passenger for deployment
-* Git Repository must be located on the same server as where the actual application will be deployed to.
-* The config/database.yml will be transferred to the shared/config/database.yml and symlinked to on the initial deployment
+* Assumes Git Repository will be located on the same server as where the actual application will be deployed. Unless specified otherwise in the configuration file.
+* The config/database.yml will be transferred to the shared/config/database.yml and symlinked to on the initial deployment. You can re-sync it later with *cap deploy:db:sync_yaml*.
 * I have overwritten/adjusted the "rake gems:install" command in production mode to try and force a successful gem installation process.
 There are occasions where there are unexpected exceptions raised when trying to issue the rake task. For example when you have an "Uninitialized Constant" inside the environment.rb which "is" initialized in development mode because you have the gem installed locally, but fails in the production environment because it does not have the gem. *Deployer* shall try to install any gem specified inside the config/environment.rb regardless of what exception is being raised to ensure all gem dependencies are installed on deployment.
 
 
 *NOTE*
 
-p. This is a _very early_ release. A lot may be subject to change, for the good! I will probably be implementing some "optional" configuration to be able to change "paths" that you can overwrite for, for example, the apache2 and nginx paths. Or the ability to push/pull your repository from a different remote server. A lot will still be implemented, this is just an early release I wanted to get out and start using myself!
+p. This is a _very early_ release. A lot may be subject to change, for the good!
 
 
 h2. Suggestions, Requests, Idea's?

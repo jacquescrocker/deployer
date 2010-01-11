@@ -33,4 +33,3 @@ set :apache_initialize_utility_path = '/etc/init.d/apache2'             unless r
 set :apache_sites_available_path    = '/etc/apache2/sites-available'    unless respond_to?(:apache_sites_available_path)
 set :nginx_initialize_utility_path  = '/etc/init.d/nginx'               unless respond_to?(:nginx_initialize_utility_path)
 set :nginx_sites_enabled_path       = '/opt/nginx/conf/sites-enabled'   unless respond_to?(:nginx_sites_enabled_path)
-

@@ -1,6 +1,11 @@
 h1. Deployer
 
-Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.
+p. Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks and a base structure. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.
+
+
+h2. Why?
+
+p. I wanted a tool that'd enhance Capistrano's default setup, and I wanted it to cause me a minimal amount of hassle and time consumption to set up as well for every time I want to deploy a new application.
 
 
 h2. Getting Started

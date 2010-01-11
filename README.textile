@@ -1,10 +1,229 @@
 h1. Deployer
 
-Deployer is an engine that enhances Capistrano's core by extending it with tasks and a base-template.
+Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.
+
+
+h2. Getting Started
+
+h3. (Gem not yet released. working on Readme/Wiki, Will be released today/tomorrow! Please wait until then.)
+
+p. install the gem
+
+bc. sudo gem install deployer
+
+p. create a new Rails app
+
+bc. rails my_application
+
+p. move into the Rails app and execute the "capify" and "enhancify" commands
+
+bc. cd my_application
+capify .
+enhancify .
+
+p. enhancify is a command, provided by deployer that will inject some code into the Capfile and replace the config/deploy.rb with the one used for *Deployer*.
+If the deploy.rb file already exists, it will simply rename it to "deploy.old.1.rb", and if that also exists it will rename it to deploy.old.2.rb, etc. etc. So you will never accidentally overwrite your initial deploy.rb file.
+
+p. *Next, open the config/deploy.rb file and edit the following variables.*
+
+bc. set :ip,          "123.45.678.90"
+set :domain,      "test.example.com"
+set :subdomain,   true
+set :user,        "root"
+
+p. For the sake of *testing*, be sure to NOT test this out on your main domain. In the above example you can see how you set
+this up for a subdomain for your application to deploy a sample Rails Application to try out *Deployer*.
+
+* set :domain, "test.example.com"
+* set :subdomain, true
+
+p. _This is what you must do if you wish to try it out on a subdomain._
+
+p. And *that's it!* You are now ready to do the following through *Deployer*:
+
+* Create a remote git repository
+* Push your initial commit to the remote repository
+* Create the production environment to where you will deploy your application to
+* Let *Deployer* create a simple Apache2 or NginX virtual-host file, transfer it to your remote server and restart the web-server
+* And, of course, deploy and run your Rails application!
+
+p. Here is are the quick-reference comments of the config/deploy.rb file
+
+bc. # Quick Reference
+# Configure the essential configurations below and do the following:
+# 
+#   Create Local and Remote Repository:
+#     git init
+#     cap deploy:repository:create
+# 
+#   Initial Deployment:
+#     git add .
+#     git commit -am "Initial commit for deployment"
+#     git push origin master
+#     cap deploy:initial
+#     
+#   Then For Every Update Just Do:
+#     git add .
+#     git commit -am "some other commit"
+#     git push origin master
+#     cap deploy
+#
+#   For Apache2 Users
+#     cap deploy:apache:create
+#     cap deploy:apache:destroy
+#     cap deploy:apache:restart
+#     cap deploy:apache:destroy_all
+#
+#   For NginX Users
+#     cap deploy:nginx:create
+#     cap deploy:nginx:destroy
+#     cap deploy:nginx:restart
+#     cap deploy:nginx:destroy_all
+#
+#   For a Full List of Commands
+#     cap -T
+
+p. *NOTE*
+
+p. The Apache2 and NginX tasks are totally OPTIONAL. Before you use these, please scroll down this page and see what it's all about. It essentially parses an initial *apache* or *nginx* virtual host file. Once parsed, it will transfer this inside the sites-available / sites-enabled folders. Afterwards *Apache* or *Nginx* will automatically get restarted. So basically you COULD deploy a web application without ever manually *SSH*'ing into the production box. I use this, but again, please read more about this before attempting it just so you know whats going on if it doesn't work for you. It depends on various things. It's optional so you don't have to use these methods since we're talking about *deployment* and not *server management*, it's just a simple little extra that *Deployer* provides, nothing really fancy.
+
+p. There are more tasks, but these will be your main commands. It's pretty straightforward.
+
+p. To list all commands:
+
+bc. cap -T
+
+
+h2. Additional Configuration
+
+*Shared Folders and Symlinks*
+
+p. I wanted to keep this as simple as possible as well. By default, *Deployer* will create folders for storing the production.log in and other necessary stuff.
+It will properly symlink it from the shared folder to the Rails application. However! You will most likely have some other things you must keep in a shared folder, such as assets
+or other files. This can be done easily with *Deployer*.
+
+p. Again, inside of config/deploy.rb
+
+bc. set :additional_shared_folders,
+  %w(public/assets db)
+
+p. In this example two paths will be created.
+
+* /var/rails/:domain/shared/public/assets
+* /var/rails/:domain/shared/db
+
+p. *Deployer* will ensure these are available after every deployment. And will append any folders if you change the values here and re-deploy.
+
+p. Now, what use are these folders if you do not have the ability to add symlinks from these folders to the application.
+
+bc. set :additional_shared_symlinks,
+  %w(public/assets db/production.sqlite3)
+  
+p. In this example two symlinks will be created from the shared_path to the current Rails application release.
+As you can see the first symlink is a "path" symlink, which does not point to a direct file, but rather a folder.
+
+p. The second symlink will be a link from the shared/db/production.sqlite3 to the current rails applications' db/production.sqlite3 file.
+
+*NOTE*
+
+p. One important thing to note here is that notice how the symlinks are mirrored to the Rails applications folder structure. This will always be the case. If you have some crazy architecture inside your Rails application: *rails_root/my/awesome/folder/structure/is/very/long* then you MUST create the following folder structure for the shared path: *shared/my/awesome/folder/structure/is/very/long*. This is a convention and it saves a lot of overhead in your configuration file by just defining a path once and using that same path for both the current and shared path.
+
+h3. *Adding Application Specific Deployment Tasks*
+
+p. Inside the *namespace :deploy do* block you can define your own deployment tasks that are specific to your application.
+
+bc.. # Application Specific Deployment Tasks
+namespace :deploy do
+  
+  desc "This is my custom task."
+  task :my_custom_task do
+    run "ls #{shared_path}"
+  end
+  
+  namespace :nested do
+    desc "This is my nested custom task."
+    task :my_custom_task do
+      puts "ls #{shared_path}"
+    end
+  end
+
+end
 
 
 
+p. Again, very straightforward. Just define your tasks as you normally would with Capistrano.
+Then, to invoke them during each deployment you must add them inside the *after_deploy*, method like so:
 
+bc. def after_deploy
+  run_custom_task "my_custom_task"
+  run_custom_task "nested:my_custom_task"
+end
+
+p. This method will be invoked right before *Deployer* sets permissions on, and restarts the your Rails application. 
+
+
+h3. Built-in Additional Tasks
+
+p. *Deployer* has some built-in tasks that are often used by developers.
+
+p. *Whenever*, To update the crontab on deployment:
+
+bc. def after_deploy
+  run_custom_task "whenever:update_crontab"
+end
+
+p. *Delayed Job*, To start/stop daemons
+
+bc. def after_deploy
+  run_custom_task "delayed_job:start"
+  run_custom_task "delayed_job:start n=3" # "n" specifies the amount of daemons that should run
+  run_custom_task "delayed_job:stop"
+end
+
+
+h2. Assumptions / Conventions
+
+p. Deployer favors Convention of Configuration. There are a few things you need to be aware of before you start using it. Just so it doesn't confuse you.
+
+p. By filling in the 4 variables (ip, domain, subdomain, user) you are practically set to create a remote git repository, push your local repository to it, create your production environment, deploy to your production environment from your remote repository and even let *Deployer* parse the simple apache2 and nginx configuration vhost files and transfer them to the server. Of course, you can also just choose to do setup your virtual hosts manually, it is totally optional. The availability of this option depends on your OS architecture/webserver installation path.
+
+p. Now, just to clear some things up with some facts about the conventions:
+
+*Rails Application Deployment Path*
+
+bc. /var/rails/:domain
+
+*Git Repository Path*
+
+bc. /var/git/:domain.git
+
+*If using the Apache2 create/destroy/restart/destroy_all features, Apache2's sites-available path must be*
+
+bc. /etc/apache2/sites-available/
+
+*If using the NginX create/destroy/restart/destroy_all features, NginX's sites-enabled path must be*
+
+bc. /opt/nginx/conf/sites-enabled/
+
+p. Additionally, you must be able to start/stop the NginX webserver through these commands: "/etc/init.d/nginx start" and "/etc/init.d/nginx stop"
+If you don't have this functionality, but want it, check out: "http://github.com/meskyanichi/rails-nginx-passenger-ubuntu":http://github.com/meskyanichi/rails-nginx-passenger-ubuntu
+For NginX you must also add this: *include sites-enabled/** inside the nginx configuration file, inside the *server{}* block to include all settings that *Deployer* transfers into the sites-enabled
+
+* Assumes you are using Phusion Passenger for deployment
+* Git Repository must be located on the same server as where the actual application will be deployed to.
+* The config/database.yml will be transferred to the shared/config/database.yml and symlinked to on the initial deployment
+* I have overwritten/adjusted the "rake gems:install" command in production mode to try and force a successful gem installation process.
+There are occasions where there are unexpected exceptions raised when trying to issue the rake task. For example when you have an "Uninitialized Constant" inside the environment.rb which "is" initialized in development mode because you have the gem installed locally, but fails in the production environment because it does not have the gem. *Deployer* shall try to install any gem specified inside the config/environment.rb regardless of what exception is being raised to ensure all gem dependencies are installed on deployment.
+
+
+*NOTE*
+
+p. This is a _very early_ release. A lot may be subject to change, for the good! I will probably be implementing some "optional" configuration to be able to change "paths" that you can overwrite for, for example, the apache2 and nginx paths. Or the ability to push/pull your repository from a different remote server. A lot will still be implemented, this is just an early release I wanted to get out and start using myself!
+
+
+h2. Suggestions, Requests, Idea's?
+
+Tell, Ask, Fork and Help!
 
 
 h2. Copyright

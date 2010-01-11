@@ -7,7 +7,7 @@ namespace :deploy do
         log "Installing #{ENV['gem']}"
         run "gem install #{ENV['gem']}"
       else
-        log "Installing required gems from environment.rb on the server"
+        log "Installing required gems"
         run "cd #{current_path}; rake deployer_gems:install #{env}"
       end
     end

@@ -1,43 +1,31 @@
-after 'deploy:setup', 'deploy:setup_shared_path'
-
 namespace :deploy do
   
-  # Tasks that run after every deployment (cap deploy)
   desc "Initializes a bunch of tasks in order after the last deployment process."
   task :restart do
-    create_production_log
-    setup_symlinks
+    system "cap deploy:setup_shared_path" unless defined?(@initial)
+    system "cap deploy:setup_symlinks"
     system "cap deploy:gems:install"
     system "cap deploy:db:create"
     system "cap deploy:db:migrate"
     after_deploy if respond_to?(:after_deploy)    
-    set_permissions
-    system 'cap deploy:passenger:restart'
+    system "cap deploy:set_permissions"
+    system "cap deploy:passenger:restart"
   end
 
-  # Deployment Tasks
   desc "Executes the initial procedures for deploying a Ruby on Rails Application."
   task :initial do
+    @initial = true
     system "cap deploy:setup"
+    system "cap deploy:setup_shared_path"
+    system "cap deploy:db:sync_yaml"
+    system "cap deploy:sync_tasks"
     system "cap deploy"
-    system "cap deploy:gems:install"
-    system "cap deploy:db:create"
-    system "cap deploy:db:migrate"
-    system "cap deploy:passenger:restart"
   end
   
   desc "Sets permissions for Rails Application"
   task :set_permissions do
     log "Setting Permissions"
-    run "chown -R www-data:www-data #{shared_path} #{release_path}"
-  end
-  
-  desc "Creates the production log if it does not exist"
-  task :create_production_log do
-    unless File.exist?(File.join(shared_path, 'log', 'production.log'))
-      log "Creating Production Log"
-      run "touch #{File.join(shared_path, 'log', 'production.log')}"
-    end
+    run "chown -R www-data:www-data #{deploy_to}"
   end
   
   desc "Creates symbolic links from shared folder"
@@ -51,7 +39,6 @@ namespace :deploy do
     end
   end
   
-  # Tasks that run after the (cap deploy:setup)
   desc "Sets up the shared path"
   task :setup_shared_path do
     log "Setting up the shared path"
@@ -60,11 +47,8 @@ namespace :deploy do
     shared_folders.each do |folder|
       run "mkdir -p #{shared_path}/#{folder}"
     end
-    system "cap deploy:db:sync_yaml"
-    system "cap deploy:sync_tasks"
   end
-  
-  # Manual Tasks
+
   desc "Syncs the rake tasks for installing gems."
   task :sync_tasks do
     log "Adding Deployer Rake tasks to shared path."

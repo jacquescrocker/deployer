@@ -32,10 +32,10 @@
 #   For a Full List of Commands
 #     cap -T
 
-set :ip,          "123.45.678.90"
-set :domain,      "example.com"
-set :subdomain,   false
-set :user,        "root"
+set :ip,          "123.45.678.90" # the ip address that points to your production server and git repository
+set :domain,      "example.com"   # or    set :domain,    "subdomain.example.com"
+set :subdomain,   false           # and   set :subdomain, true
+set :user,        "root"          # the user that has access
 
 # Set up additional shared folders
 set :additional_shared_folders,

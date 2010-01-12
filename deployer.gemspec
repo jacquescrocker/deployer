@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael van Rooijen"]
-  s.date = %q{2010-01-11}
+  s.date = %q{2010-01-12}
   s.default_executable = %q{enhancify}
   s.description = %q{Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.}
   s.email = %q{meskyanichi@gmail.com}

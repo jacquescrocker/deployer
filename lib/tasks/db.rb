@@ -29,6 +29,7 @@ namespace :deploy do
       task :reset do
        log "Resetting the Production Database"
        run "cd #{current_path}; rake db:migrate:reset #{env}"
+       system "cap deploy:set_permissions"
       end
 
     end
@@ -43,6 +44,7 @@ namespace :deploy do
     task :seed do
      log "Populating the Production Database"
      run "cd #{current_path}; rake db:seed #{env}"
+     system "cap deploy:set_permissions"
     end
     
   end

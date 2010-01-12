@@ -3,15 +3,15 @@
 options = {}
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "\nUsage: enhancify [path]\n "
+  opts.banner = "Usage: enhancify [path]"
 end
 
 begin
   optparse.parse!
 rescue OptionParser::InvalidOption
-  puts "\nInvalid Option. See the list of available options below.\n"
+  puts "Invalid Option. There are no options. Please specify the path in which the Capfile resides."
+  puts "e.g. => enhancify /Users/Michael/Desktop/RAILS_ROOT"
   puts optparse
-  puts "\n "
   exit
 end
 

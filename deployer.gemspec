@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{deployer}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael van Rooijen"]
@@ -43,7 +43,6 @@ Gem::Specification.new do |s|
      "lib/tasks/repository.rb",
      "setup/deploy.rb"
   ]
-  s.homepage = %q{http://github.com/meskyanichi/deployer}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}

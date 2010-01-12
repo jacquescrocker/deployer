@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.}
     gem.description = %Q{Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.}
     gem.email = "meskyanichi@gmail.com"
-    gem.homepage = "http://github.com/meskyanichi/deployer"
+    #gem.homepage = "http://github.com/meskyanichi/deployer"
     gem.authors = ["Michael van Rooijen"]
     gem.add_dependency "capistrano", ">= 2.5.13"
   end

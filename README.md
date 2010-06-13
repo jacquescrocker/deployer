@@ -2,7 +2,11 @@
 
 Deployer is gem that enhances Capistrano to simplify the deployment of Ruby on Rails applications.
 
-It assumes you are using Passenger to serve your Ruby on Rails applications.
+It assumes you are using Passenger to serve your Ruby on Rails applications, and Bundler to manage gem dependencies.
+
+It works with **Ruby on Rails 3** and **Ruby on Rails 2** applications as long as you are using **Bundler**.
+
+*If you are currently using the old config.gem method in a Ruby on Rails 2 application, you can easily change this to make it use Bundler instead. [Check out my gist on how to achieve Rails 2 Bundler compatibility.](http://gist.github.com/400609)*
 
 
 ## Getting Started
@@ -146,7 +150,7 @@ Here you can specify that you want to pull/push from/to a git repository that's 
 
 And then here is the last bit of server configuration you can specify.
 
-### *Adding Application Specific Deployment Tasks*
+### Adding Application Specific Deployment Tasks
 
 Inside the *namespace :deploy do* block you can define your own deployment tasks that are specific to your application.
 

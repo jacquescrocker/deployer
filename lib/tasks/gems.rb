@@ -1,14 +1,18 @@
 namespace :deploy do
   namespace :gems do
     
-    desc "Installs any 'not-yet-installed' gems on the production server or a single gem when the gem= is specified."
+    desc "Installs dependencies for application, or a single gem when the gem= is specified."
     task :install do
       if ENV['gem']
         log "Installing #{ENV['gem']}"
         run "gem install #{ENV['gem']}"
       else
         log "Installing gem dependencies"
-        run "cd #{current_path}; rake deployer_gems:install #{env}"
+        if bundle_satisfied? and ENV['force'] != "true"
+          puts "The Gemfile's dependencies are satisfied"
+        else
+          run "cd #{current_path}; #{bundle_path} install"
+        end
       end
     end
     

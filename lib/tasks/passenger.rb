@@ -3,7 +3,7 @@ namespace :deploy do
     
     desc "Restarts Passenger"
     task :restart do
-      log "Restarting Passenger"
+      log "Restarting #{appname}"
       run "touch #{current_path}/tmp/restart.txt"
     end
 

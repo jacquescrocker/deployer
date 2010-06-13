@@ -3,7 +3,7 @@ namespace :deploy do
     
     desc "Syncs the database.yml file from the local machine to the remote machine"
     task :sync_yaml do
-     log "Syncing database yaml to the production server"
+     log "Syncing local database.yml (config/database.yml) to the shared folder (#{appname}/shared/config/database.yml)"
      unless File.exist?("config/database.yml")
        puts "There is no config/database.yml.\n "
        exit
@@ -11,40 +11,38 @@ namespace :deploy do
      system "rsync -vr --exclude='.DS_Store' config/database.yml #{user}@#{application}:#{shared_path}/config/"
     end
 
-    desc "Create Production Database"
+    desc "Create the database"
     task :create do
-     log "Creating the Production Database"
-     run "cd #{current_path}; rake db:create #{env}"
+      log "Creating the database"
+      run "cd #{current_path}; #{rake_path} db:create #{env}"
     end
     
     namespace :migrate do
       
-      desc "Migrate Production Database"
+      desc "Migrate the database"
       task :default do
-       log "Migrating the Production Database"
-       run "cd #{current_path}; rake db:migrate #{env}"
+       log "Migrating the database"
+       run "cd #{current_path}; #{rake_path} db:migrate #{env}"
       end
 
-      desc "Resets the Production Database"
+      desc "Reset the database"
       task :reset do
-       log "Resetting the Production Database"
-       run "cd #{current_path}; rake db:migrate:reset #{env}"
-       system "cap deploy:set_permissions"
+       log "Resetting the database"
+       run "cd #{current_path}; #{rake_path} db:migrate:reset #{env}"
       end
 
     end
       
-    desc "Destroys Production Database"
+    desc "Drop the database"
     task :drop do
-     log "Destroying the Production Database"
-     run "cd #{current_path}; rake db:drop #{env}"
+     log "Dropping the database"
+     run "cd #{current_path}; #{rake_path} db:drop #{env}"
     end
 
-    desc "Populates the Production Database"
+    desc "Populate the database"
     task :seed do
-     log "Populating the Production Database"
-     run "cd #{current_path}; rake db:seed #{env}"
-     system "cap deploy:set_permissions"
+     log "Seeding the database"
+     run "cd #{current_path}; #{rake_path} db:seed #{env}"
     end
     
   end

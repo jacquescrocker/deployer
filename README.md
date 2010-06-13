@@ -1,12 +1,8 @@
 # Deployer
 
-Deployer is a deployment engine (Ruby Gem) that enhances Capistrano with a set of useful automated deployment tasks and a base structure. It favors convention over configuration, and it simplifies Rails Application Deployment with Capistrano.
+Deployer is gem that enhances Capistrano to simplify the deployment of Ruby on Rails applications.
 
-It assumes you are using Passenger to serve your Rails applications.
-
-## Why?
-
-I wanted a tool that'd enhance Capistrano's default setup, and I wanted it to cause me a minimal amount of hassle and time consumption to set up as well for every time I want to deploy a new application.
+It assumes you are using Passenger to serve your Ruby on Rails applications.
 
 
 ## Getting Started
@@ -206,7 +202,7 @@ This method will be invoked right before *Deployer* sets permissions on, and res
 - Assumes you are using Phusion Passenger
 - Assumes Git Repository will be located on the same server as where the actual application will be deployed. Unless specified otherwise in the deploy.rb file.
 - The config/database.yml will be transferred to the shared/config/database.yml and symlinked to on the initial deployment. You can re-sync it later with *cap deploy:db:sync_yaml*.
-- Assumes you are using Bundler, it no longer supports config/environment.rb's **gem.config** 
+- Assumes you are using Bundler, it no longer supports config/environment.rb's **gem.config** (You can also use Bundler with Rails 2 apps)
 
 ## Suggestions, Requests, Idea's?
 

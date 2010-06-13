@@ -40,7 +40,7 @@ set :branch,    "production"      # the branch that should be deployed
 # Optional
 # If you want to use a repository from a different location (github.com, trunksapp.com, etc)
 # Then you can specify the URL here. When using this, the "cap deploy:repository" tasks won't work.
-set :repository_url, "deployer@example.com:/path/to/repository.git"
+# set :repository_url, "deployer@example.com:/path/to/repository.git"
 
 
 ##

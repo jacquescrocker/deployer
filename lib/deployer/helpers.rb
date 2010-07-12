@@ -7,7 +7,7 @@ end
 ##
 # Helper Method that assists in loading in tasks from the tasks folder
 def load_tasks(tasks)
-  load File.join(File.dirname(__FILE__), '..', 'tasks', "#{tasks}.rb")
+  load File.join(File.dirname(__FILE__), 'tasks', "#{tasks}.rb")
 end
 
 ##

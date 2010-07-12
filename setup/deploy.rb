@@ -38,38 +38,60 @@ set :branch,    "production"      # the branch that should be deployed
 
 ##
 # Optional
+# Specify custom deployment path
+
+# set :deploy_path, "/var/apps/#{appname}"
+
+
+##
+# Optional
 # If you want to use a repository from a different location (github.com, trunksapp.com, etc)
 # Then you can specify the URL here. When using this, the "cap deploy:repository" tasks won't work.
+
 # set :repository_url, "deployer@example.com:/path/to/repository.git"
 
 
 ##
 # Optional
 # Use this to define a list of files you want to upload for the deploy:initial task
+
 # set :sync_files,
-#   %w()
+#   %w(config/mongoid.yml)
 
-
-##
-# Set up additional shared folders
-set :additional_shared_folders,
-  %w(public/system db)
 
 ##
 # Optional
-# Use this to skip db deployment tasks
+# Use this to skip database deployment tasks (db:create, db:migrate)
+# Useful when, for example, not using ActiveRecord, but MongoDB with Mongoid instead
+
 # set :skip_database, true
 
+
 ##
+# Optional
+# Set up additional shared folders. The example below will create:
+# SHARED_PATH/public/system
+# SHARED_PATH/public/assets
+# SHARED_PATH/db
+
+# set :additional_shared_folders,
+#   %w(public/system public/assets db)
+
+
+##
+# Optional
 # Set up additional shared symlinks
 # These are mirrored to the Rails Applications' structure
 # public/system         = RAILS_ROOT/public/system          => SHARED_PATH/public/system
+# public/assets         = RAILS_ROOT/public/assets          => SHARED_PATH/public/assets
 # db/production.sqlite3 = RAILS_ROOT/db/production.sqlite3  => SHARED_PATH/db/production.sqlite3
-set :additional_shared_symlinks,
-  %w(public/system db/production.sqlite3)
+
+# set :additional_shared_symlinks,
+#   %w(public/system public/assets db/production.sqlite3)
 
 
 ##
+# Optional
 # Additional Application Specific Tasks and Callbacks
 # In here you can specify which Application Specific tasks you would like to run right before
 # Passenger restarts the application. You invoke the by simply calling "run_custom_task"

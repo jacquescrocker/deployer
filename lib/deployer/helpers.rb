@@ -37,7 +37,7 @@ end
 def bundle_path
   return @bundle_path if @bundle_path
   Net::SSH.start(ip, user) do |ssh|
-    @bundle_path = ssh.exec!("which bundle").chomp || "bundle"
+    @bundle_path = ssh.exec!("which bundle") || "bundle"
   end
   @bundle_path  
 end

@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
+
+begin
+  require 'optparse'
+rescue LoadError
+  puts '[Deployer] => Tried load load OptionParser but could not find it.'
+  puts '[Deployer] => Install Option Parser ( gem install OptionParser ) and try again.'
+  exit
+end
+
 options = {}
 
 optparse = OptionParser.new do |opts|
@@ -60,7 +70,7 @@ File.open(File.join(File.dirname(__FILE__), '..', 'setup', 'deploy.rb'), "r") do
 end
 
 # checks for both require "deployer" and require "deployer/initializer"
-unless File.open(File.join('Capfile'), 'r').read.include?('require "deployer')
+unless File.open(File.join('Capfile'), 'r').read.include?('require "deployer"')
   puts "[Deployer] => Adding Deployer Loader inside #{PATH}/Capfile."
   File.open(File.join(PATH, 'Capfile'), "a") do |capfile|
 capfile << <<-CAPFILE

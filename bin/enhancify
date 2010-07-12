@@ -59,12 +59,13 @@ File.open(File.join(File.dirname(__FILE__), '..', 'setup', 'deploy.rb'), "r") do
   end
 end
 
-unless File.open(File.join('Capfile'), 'r').read.include?('require "deployer/initializer"')
+# checks for both require "deployer" and require "deployer/initializer"
+unless File.open(File.join('Capfile'), 'r').read.include?('require "deployer')
   puts "[Deployer] => Adding Deployer Loader inside #{PATH}/Capfile."
   File.open(File.join(PATH, 'Capfile'), "a") do |capfile|
 capfile << <<-CAPFILE
 \n
-require "deployer/initializer"
+require "deployer"
 load deployer
 CAPFILE
   end

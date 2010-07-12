@@ -1,6 +1,6 @@
 ##
 # Load Deployer Helpers
-require File.join(File.dirname(__FILE__), 'deployer', 'helpers')
+require File.join(File.dirname(__FILE__), 'helpers')
 
 ##
 # This Configuration Is *Conventional*

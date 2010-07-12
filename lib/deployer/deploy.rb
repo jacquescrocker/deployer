@@ -5,7 +5,7 @@ require File.join(File.dirname(__FILE__), 'helpers')
 ##
 # This Configuration Is *Conventional*
 set   :application,         ip
-set   :deploy_to,           "/var/apps/#{appname}"    unless respond_to?(:deploy_to)
+set   :deploy_to,           respond_to?(:deploy_path) ? deploy_path : "/var/apps/#{appname}"
 set   :repository_path,     "/var/git/#{appname}.git" unless respond_to?(:repository_path)
 set   :repository,          "#{user}@#{application}:#{repository_path}"   
 set   :repository,          repository_url if respond_to?(:repository_url)

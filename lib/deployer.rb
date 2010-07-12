@@ -25,6 +25,7 @@ set :branch, 'master' unless respond_to?(:branch)
 ##
 # Load Deployment Tasks
 load_tasks('global')
+load_tasks('sync')
 load_tasks('passenger')
 load_tasks('plugin')
 load_tasks('db')

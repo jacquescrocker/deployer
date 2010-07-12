@@ -5,8 +5,10 @@ namespace :deploy do
     system "cap deploy:setup_shared_path"
     system "cap deploy:setup_symlinks"
     system "cap deploy:gems:install"
-    system "cap deploy:db:create"
-    system "cap deploy:db:migrate"
+    unless respond_to?(:skip_database) and skip_database
+      system "cap deploy:db:create"
+      system "cap deploy:db:migrate"
+    end
     after_deploy if respond_to?(:after_deploy)
     system "cap deploy:passenger:restart"
   end
@@ -15,7 +17,7 @@ namespace :deploy do
   task :initial do
     system "cap deploy:setup"
     system "cap deploy:setup_shared_path"
-    system "cap deploy:db:sync_yaml"
+    system "cap deploy:sync:files"
   end
   
   desc "Sets up the shared path"
@@ -31,7 +33,10 @@ namespace :deploy do
   desc "Creates symbolic links from the application to the shared folders"
   task :setup_symlinks do
     log "Creating symbolic links from the application to the shared folders"
-    shared_symlinks = %w(config/database.yml)
+    shared_symlinks = %w()
+    unless respond_to?(:skip_database) and skip_database
+      shared_symlinks << "config/database.yml"
+    end
     shared_symlinks += additional_shared_symlinks if respond_to?(:additional_shared_symlinks)
     shared_symlinks.each do |symlink|
       run "ln -nfs #{File.join(shared_path, symlink)} #{File.join(current_path, symlink)}"

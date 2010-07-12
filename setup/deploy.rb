@@ -44,10 +44,21 @@ set :branch,    "production"      # the branch that should be deployed
 
 
 ##
+# Optional
+# Use this to define a list of files you want to upload for the deploy:initial task
+# set :sync_files,
+#   %w()
+
+
+##
 # Set up additional shared folders
 set :additional_shared_folders,
   %w(public/system db)
 
+##
+# Optional
+# Use this to skip db deployment tasks
+# set :skip_database, true
 
 ##
 # Set up additional shared symlinks

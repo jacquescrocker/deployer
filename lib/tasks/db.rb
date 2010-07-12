@@ -1,15 +1,5 @@
 namespace :deploy do
   namespace :db do
-    
-    desc "Syncs the database.yml file from the local machine to the remote machine"
-    task :sync_yaml do
-     log "Syncing local database.yml (config/database.yml) to the shared folder (#{appname}/shared/config/database.yml)"
-     unless File.exist?("config/database.yml")
-       puts "There is no config/database.yml.\n "
-       exit
-     end
-     system "rsync -vr --exclude='.DS_Store' config/database.yml #{user}@#{application}:#{shared_path}/config/"
-    end
 
     desc "Create the database"
     task :create do

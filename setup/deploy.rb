@@ -2,20 +2,20 @@
 # Configure the essential configurations below and do the following:
 #
 #   For more information:
-#   http://github.com/meskyanichi/deployer 
+#   http://github.com/meskyanichi/deployer
 #
 #   Create Local and Remote Repository:
 #   This will create a git repository on the deployment server
 #   Will not work when using a remote location such as github.com, trunksapp.com
 #     git init
 #     cap deploy:repository:create
-# 
+#
 #   Initial Deployment:
 #     git add .
 #     git commit -m "Initial commit for deployment"
 #     git push origin [:branch]
 #     cap deploy:initial
-#     
+#
 #   Then For Every Update Just Do:
 #     git add .
 #     git commit -am "some other commit"
@@ -69,6 +69,21 @@ set :branch,    "production"      # the branch that should be deployed
 
 ##
 # Optional
+# Set options for bundle install
+# Can speed up deployment by skipping the bundle install on test and development gems
+
+# set :bundle_options, "--without test --without development"
+
+
+##
+# Optional
+# Set bundler path (if in a nonstandard place)
+
+# set :bundle_path, "/usr/local/bin/bundle"
+
+
+##
+# Optional
 # Set up additional shared folders. The example below will create:
 # SHARED_PATH/public/system
 # SHARED_PATH/public/assets
@@ -105,12 +120,12 @@ end
 # Application Specific Deployment Tasks
 # In here you may specify any application specific and/or other tasks that are not handled by Deployer
 # These can be invoked by creating a "run_custom_task" method in the "after_deploy" method above
-namespace :deploy do  
+namespace :deploy do
   desc "Invoke this task manually by running: 'cap deploy:my_custom_task'"
   task :my_custom_task do
     # run "some command"
   end
-  
+
   namespace :nested do
     desc "Invoke this task manually by running: 'cap deploy:nested:my_custom_task'"
     task :my_custom_task do

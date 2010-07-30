@@ -35,6 +35,12 @@ set :user,      "deployer"        # the user that will deploy to the production 
 set :remote,    "origin"          # the remote that should be deployed
 set :branch,    "production"      # the branch that should be deployed
 
+##
+# Set options for bundle install
+# Will speed up deployment by skipping the bundle install on test and development gems
+
+set :bundle_options, "--without test --without development --production"
+
 
 ##
 # Optional
@@ -65,14 +71,6 @@ set :branch,    "production"      # the branch that should be deployed
 # Useful when, for example, not using ActiveRecord, but MongoDB with Mongoid instead
 
 # set :skip_database, true
-
-
-##
-# Optional
-# Set options for bundle install
-# Can speed up deployment by skipping the bundle install on test and development gems
-
-# set :bundle_options, "--without test --without development"
 
 
 ##

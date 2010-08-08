@@ -64,7 +64,6 @@ set :bundle_options, "--without test --without development --production"
 # set :sync_files,
 #   %w(config/mongoid.yml)
 
-
 ##
 # Optional
 # Use this to skip database deployment tasks (db:create, db:migrate)
@@ -131,3 +130,38 @@ namespace :deploy do
     end
   end
 end
+
+##
+# Staging Environment
+#
+# Deployer lets you define multiple "staging environments"
+# Just create the associated setting files at: config/deploy/[stage_name].rb
+#
+# For example, if you want 2 staging environments (staging and production) you would create 2 files:
+# config/deploy/production.rb
+# config/deploy/staging.rb
+#
+# each of these files would have the associated settings for that environment
+#
+# You can then use this environment by running `cap staging deploy` or `cap production deploy`
+
+##
+# Optional
+# Setting the default_stage will allow you to define
+# which staging environment gets used by default with a standard `cap deploy`
+
+# set :default_stage, "production"
+
+##
+# Optional
+# By default the files found at config/deploy will be used for the list of stages
+# to override this by defining your own, just set them here
+
+# set :stages, %w(test staging production)
+
+##
+# Optional
+# By default the staging files will be read from ./config/deploy
+# to overwrite this path to your own, use this setting
+
+# set :staging_dir, "./my/custom/deploy/folder"

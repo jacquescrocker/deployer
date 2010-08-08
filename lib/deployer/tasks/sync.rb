@@ -3,12 +3,12 @@ namespace :deploy do
     desc "Syncs the configured files from the local machine to the remote machine"
     task :files do
       files = []
-      
-      unless respond_to?(:skip_database) and skip_database
+
+      unless exists?(:skip_database) and skip_database
         files << "config/database.yml"
       end
 
-      if respond_to?(:sync_files)
+      if exists?(:sync_files)
         files += sync_files
       end
 

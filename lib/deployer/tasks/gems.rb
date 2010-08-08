@@ -11,7 +11,7 @@ namespace :deploy do
         if bundle_satisfied? and ENV['force'] != "true"
           puts "The Gemfile's dependencies are satisfied"
         else
-          run "cd #{current_path}; #{bundle_path} install #{bundle_options if respond_to?(:bundle_options)}"
+          run "cd #{current_path}; #{bundle_path} install #{bundle_options if exists?(:bundle_options)}"
         end
       end
     end

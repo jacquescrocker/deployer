@@ -1,8 +1,8 @@
 namespace :deploy do
   namespace :repository do
-    
+
     task :base do
-      if respond_to?(:repository_url)
+      if exists?(:repository_url)
         log "You cannot interact with your repository through Deployer Tasks as long as you have the \"repository_url\" defined."
         log "Deployer only handles repositories that are located on the same server location as to where the actual Rails Application will be deployed."
         log "If you wish to have this functionality, please comment out the \"repository_url\" inside the config/deploy.rb."
@@ -38,7 +38,7 @@ namespace :deploy do
       system "cap deploy:repository:destroy"
       system "cap deploy:repository:create"
     end
-    
+
     desc "Reinitializes #{remote}/master."
     task :reinitialize do
       base
@@ -46,6 +46,6 @@ namespace :deploy do
       system "git remote add #{remote} #{repository[:repository]}"
       p "#{repository[:repository]} (#{remote}/master) was added to your git repository."
     end
-    
+
   end
 end

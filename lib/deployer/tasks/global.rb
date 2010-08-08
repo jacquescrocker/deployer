@@ -5,7 +5,7 @@ namespace :deploy do
     system "cap deploy:setup_shared_path"
     system "cap deploy:setup_symlinks"
     system "cap deploy:gems:install"
-    unless respond_to?(:skip_database) and skip_database
+    unless exists?(:skip_database) and skip_database
       system "cap deploy:db:create"
       system "cap deploy:db:migrate"
     end
@@ -24,7 +24,7 @@ namespace :deploy do
   task :setup_shared_path do
     log "Setting up the shared folders"
     shared_folders = %w(config lib/tasks)
-    shared_folders += additional_shared_folders if respond_to?(:additional_shared_folders)
+    shared_folders += additional_shared_folders if exists?(:additional_shared_folders)
     shared_folders.each do |folder|
       run "mkdir -p #{shared_path}/#{folder}"
     end
@@ -34,10 +34,10 @@ namespace :deploy do
   task :setup_symlinks do
     log "Creating symbolic links from the application to the shared folders"
     shared_symlinks = %w()
-    unless respond_to?(:skip_database) and skip_database
+    unless exists?(:skip_database) and skip_database
       shared_symlinks << "config/database.yml"
     end
-    shared_symlinks += additional_shared_symlinks if respond_to?(:additional_shared_symlinks)
+    shared_symlinks += additional_shared_symlinks if exists?(:additional_shared_symlinks)
     shared_symlinks.each do |symlink|
       run "ln -nfs #{File.join(shared_path, symlink)} #{File.join(current_path, symlink)}"
     end

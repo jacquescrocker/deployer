@@ -36,8 +36,8 @@ default_run_options[:pty] = true
 
 ##
 # Default Configuration
-set :remote, 'origin' unless respond_to?(:remote)
-set :branch, 'master' unless respond_to?(:branch)
+set :remote, 'origin' unless exists?(:remote)
+set :branch, 'master' unless exists?(:branch)
 
 ##
 # Load Deployment Tasks

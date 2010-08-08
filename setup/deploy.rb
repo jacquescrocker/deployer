@@ -74,6 +74,14 @@ set :bundle_options, "--without test --without development --production"
 
 ##
 # Optional
+# Set options for bundle install
+# Can speed up deployment by skipping the bundle install on test and development gems
+
+# set :bundle_options, "--without test --without development"
+
+
+##
+# Optional
 # Set bundler path (if in a nonstandard place)
 
 # set :bundle_path, "/usr/local/bin/bundle"

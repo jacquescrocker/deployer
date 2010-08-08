@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name    = 'deployer'
-  gem.version = '0.1.4'
+  gem.version = '0.1.5'
   gem.date    = Time.now.strftime("%Y-%m-%d")
 
   gem.summary     = "Deployer is gem that enhances Capistrano to simplify the deployment of Ruby on Rails applications."
